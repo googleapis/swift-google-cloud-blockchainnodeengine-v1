@@ -47,7 +47,7 @@ public class BlockchainNodeEngineClient: Clients.BlockchainNodeEngineProtocol {
   /// @Snippet(path: "BlockchainNodeEngine_ListBlockchainNodes")
   public func listBlockchainNodes(
     request: ListBlockchainNodesRequest, options: GoogleCloudGax.RequestOptions
-  ) async throws -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse {
+  ) async throws -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse {
     try await self.inner.listBlockchainNodes(request: request, options: options)
   }
 
@@ -59,7 +59,7 @@ public class BlockchainNodeEngineClient: Clients.BlockchainNodeEngineProtocol {
   ) throws -> any AsyncSequence<BlockchainNode, Swift.Error> {
     let listRpc = {
       (token: Swift.String) async throws
-        -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse in
+        -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse in
       var request = byItem
       request.pageToken = token
       return try await self.listBlockchainNodes(request: request, options: options)
@@ -72,7 +72,7 @@ public class BlockchainNodeEngineClient: Clients.BlockchainNodeEngineProtocol {
   /// @Snippet(path: "BlockchainNodeEngine_GetBlockchainNode")
   public func getBlockchainNode(
     request: GetBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
-  ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode {
+  ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode {
     try await self.inner.getBlockchainNode(request: request, options: options)
   }
 
@@ -361,7 +361,7 @@ extension Clients {
   public protocol BlockchainNodeEngineProtocol {
     /// See `BlockchainNodeEngineClient.listBlockchainNodes`.
     func listBlockchainNodes(request: ListBlockchainNodesRequest) async throws
-      -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse
+      -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse
 
     /// See `BlockchainNodeEngineClient.listBlockchainNodes`.
     func listBlockchainNodes(
@@ -375,12 +375,12 @@ extension Clients {
 
     /// See `BlockchainNodeEngineClient.getBlockchainNode`.
     func getBlockchainNode(request: GetBlockchainNodeRequest) async throws
-      -> GoogleCloudBlockchainnodeengineV1.BlockchainNode
+      -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode
 
     /// See `BlockchainNodeEngineClient.getBlockchainNode`.
     func getBlockchainNode(
       name: Swift.String,
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode
 
     /// See `BlockchainNodeEngineClient.createBlockchainNode`.
     func createBlockchainNode(request: CreateBlockchainNodeRequest) async throws
@@ -471,7 +471,7 @@ extension Clients {
     /// See `BlockchainNodeEngineClient.listBlockchainNodes`.
     func listBlockchainNodes(
       request: ListBlockchainNodesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse
 
     /// See `BlockchainNodeEngineClient.listBlockchainNodes`.
     func listBlockchainNodes(
@@ -481,7 +481,7 @@ extension Clients {
     /// See `BlockchainNodeEngineClient.getBlockchainNode`.
     func getBlockchainNode(
       request: GetBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode
 
     /// See `BlockchainNodeEngineClient.createBlockchainNode`.
     func createBlockchainNode(
@@ -553,14 +553,14 @@ extension Clients {
 // Default implementations
 extension Clients.BlockchainNodeEngineProtocol {
   public func listBlockchainNodes(request: ListBlockchainNodesRequest) async throws
-    -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse
+    -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse
   {
     try await self.listBlockchainNodes(request: request, options: .init())
   }
 
   public func listBlockchainNodes(
     request: ListBlockchainNodesRequest, options: GoogleCloudGax.RequestOptions
-  ) async throws -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse {
+  ) async throws -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse {
     throw GoogleCloudGax.RequestError.unimplemented
   }
 
@@ -575,7 +575,7 @@ extension Clients.BlockchainNodeEngineProtocol {
   ) throws -> any AsyncSequence<BlockchainNode, Swift.Error> {
     let listRpc = {
       (token: Swift.String) async throws
-        -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse in
+        -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse in
       throw GoogleCloudGax.RequestError.unimplemented
     }
     return GoogleCloudGax.PaginatedResponseSequence(listRpc: listRpc)
@@ -591,20 +591,20 @@ extension Clients.BlockchainNodeEngineProtocol {
   }
 
   public func getBlockchainNode(request: GetBlockchainNodeRequest) async throws
-    -> GoogleCloudBlockchainnodeengineV1.BlockchainNode
+    -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode
   {
     try await self.getBlockchainNode(request: request, options: .init())
   }
 
   public func getBlockchainNode(
     request: GetBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
-  ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode {
+  ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode {
     throw GoogleCloudGax.RequestError.unimplemented
   }
 
   public func getBlockchainNode(
     name: Swift.String,
-  ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode {
+  ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode {
     let request = GetBlockchainNodeRequest().with {
       $0.name = name
     }

@@ -23,52 +23,44 @@ import GoogleCloudWkt
 import GoogleLongrunning
 import GoogleRpc
 import GoogleCloudGax
-import struct Logging.Logger
 
 extension Clients {
-  final class BlockchainNodeEngineLogging: BlockchainNodeEngineStub {
+  final class BlockchainNodeEngineRetry: BlockchainNodeEngineStub {
     let inner: any BlockchainNodeEngineStub
-    let logger: Logger
+    let options: GoogleCloudGax.ClientOptions
 
-    public init(_ inner: any BlockchainNodeEngineStub, logger: Logger) {
-      var logger = logger
-      logger[metadataKey: "gcp.artifact.id"] = "google-cloud-blockchainnodeengine-v1"
-      logger[metadataKey: "gcp.client.service"] = "blockchainnodeengine"
-      logger[metadataKey: "gcp.experimental.swift.client"] = "BlockchainNodeEngine"
+    public init(_ inner: any BlockchainNodeEngineStub, options: GoogleCloudGax.ClientOptions) {
       self.inner = inner
-      self.logger = logger
+      self.options = options
     }
 
     func _intercept<Input, Output>(
       request: Input,
       options: GoogleCloudGax.RequestOptions,
-      name: Swift.String,
+      idempotent: Swift.Bool,
       action: (Input, GoogleCloudGax.RequestOptions) async throws -> Output,
     ) async throws -> Output {
-      var logger = logger
-      logger[metadataKey: "gcp.experimental.swift.request.id"] = "\(UUID())"
-      logger[metadataKey: "gcp.experimental.swift.method"] = .string(name)
-      logger.debug("enter  : \(request) \(options)")
-      do {
-        let output = try await action(request, options)
-        logger.debug("success: \(request) \(options) \(output)")
-        return output
-      } catch let error {
-        logger.debug("error  : \(request) \(options) \(error)")
-        throw error
+      let loop = GoogleCloudGax._RetryLoop(
+        options: options, withDefault: self.options, idempotent: idempotent,
+      )
+      let attempt = { (attemptTimeout: Swift.Duration?) async throws -> Output in
+        var attemptOptions = options
+        attemptOptions.attemptTimeout = attemptTimeout
+        return try await action(request, attemptOptions)
       }
+      return try await loop.run(attempt: attempt)
     }
 
     public func listBlockchainNodes(
       request: ListBlockchainNodesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse {
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listBlockchainNodes",
+        idempotent: true,
         action: {
           (r: ListBlockchainNodesRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse
+            -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse
           in
           return try await self.inner.listBlockchainNodes(request: r, options: o)
         })
@@ -76,14 +68,14 @@ extension Clients {
 
     public func getBlockchainNode(
       request: GetBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode {
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getBlockchainNode",
+        idempotent: true,
         action: {
           (r: GetBlockchainNodeRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleCloudBlockchainnodeengineV1.BlockchainNode
+            -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode
           in
           return try await self.inner.getBlockchainNode(request: r, options: o)
         })
@@ -95,7 +87,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "createBlockchainNode",
+        idempotent: false,
         action: {
           (r: CreateBlockchainNodeRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -110,7 +102,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "updateBlockchainNode",
+        idempotent: false,
         action: {
           (r: UpdateBlockchainNodeRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -125,7 +117,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "deleteBlockchainNode",
+        idempotent: false,
         action: {
           (r: DeleteBlockchainNodeRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -140,7 +132,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listLocations",
+        idempotent: true,
         action: {
           (r: GoogleCloudLocation.ListLocationsRequest, o: GoogleCloudGax.RequestOptions)
             async throws -> GoogleCloudLocation.ListLocationsResponse
@@ -155,7 +147,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getLocation",
+        idempotent: true,
         action: {
           (r: GoogleCloudLocation.GetLocationRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleCloudLocation.Location
@@ -170,7 +162,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listOperations",
+        idempotent: true,
         action: {
           (r: GoogleLongrunning.ListOperationsRequest, o: GoogleCloudGax.RequestOptions)
             async throws -> GoogleLongrunning.ListOperationsResponse
@@ -185,7 +177,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getOperation",
+        idempotent: true,
         action: {
           (r: GoogleLongrunning.GetOperationRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -200,7 +192,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "deleteOperation",
+        idempotent: false,
         action: {
           (r: GoogleLongrunning.DeleteOperationRequest, o: GoogleCloudGax.RequestOptions)
             async throws -> Void in
@@ -214,7 +206,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "cancelOperation",
+        idempotent: false,
         action: {
           (r: GoogleLongrunning.CancelOperationRequest, o: GoogleCloudGax.RequestOptions)
             async throws -> Void in

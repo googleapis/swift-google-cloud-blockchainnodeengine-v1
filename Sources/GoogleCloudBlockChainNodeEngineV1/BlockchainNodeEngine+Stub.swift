@@ -28,11 +28,11 @@ extension Clients {
   protocol BlockchainNodeEngineStub {
     func listBlockchainNodes(
       request: ListBlockchainNodesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse
 
     func getBlockchainNode(
       request: GetBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode
 
     func createBlockchainNode(
       request: CreateBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
@@ -81,7 +81,7 @@ extension Clients {
 
     public func listBlockchainNodes(
       request: ListBlockchainNodesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse {
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.parent as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.parent' is not set or is empty")
@@ -101,12 +101,12 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleCloudBlockchainnodeengineV1.ListBlockchainNodesResponse.self, from: data)
+        GoogleCloudBlockChainNodeEngineV1.ListBlockchainNodesResponse.self, from: data)
     }
 
     public func getBlockchainNode(
       request: GetBlockchainNodeRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleCloudBlockchainnodeengineV1.BlockchainNode {
+    ) async throws -> GoogleCloudBlockChainNodeEngineV1.BlockchainNode {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.name as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.name' is not set or is empty")
@@ -121,7 +121,7 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleCloudBlockchainnodeengineV1.BlockchainNode.self, from: data)
+        GoogleCloudBlockChainNodeEngineV1.BlockchainNode.self, from: data)
     }
 
     public func createBlockchainNode(
